@@ -16,13 +16,18 @@ module ImageResizer
       @owner
     end
 
-    # Image quality 0-100
+    # Optimization options.
     #
-    def quality(value = 85)
-      operations << {operation: :quality, value: value}
+    # - quality: 1-100
+    # - baseline: boolean
+    # - progressive: boolean
+    #
+    def optimize(quality: 85, baseline: false, progressive: false)
+      operations << {operation: :optimize, quality: quality,
+                                           baseline: baseline,
+                                           progressive: progressive}
       @owner
     end
-    alias_method :optimize, :quality
 
     # Sets the image aspect ratio. Parameter must be in WxH format
     #
@@ -69,8 +74,11 @@ module ImageResizer
 
     def operation_to_s(op)
       case op[:operation]
-      when :quality
-        "O=#{op[:value]}"
+      when :optimize
+        out = "O=#{op[:quality]}"
+        out += ",P" if op[:progressive]
+        out += ",B" if op[:baseline]
+        out
       when :aspect_ratio
         "C=AR#{op[:value]}"
       when :square_crop

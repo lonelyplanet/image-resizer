@@ -10,7 +10,7 @@ module ImageResizer
       end
 
       it 'populates the operations array' do
-        expect(subject.quality(80).operations.size).to eq(1)
+        expect(subject.optimize(quality: 80).operations.size).to eq(1)
       end
     end
 
@@ -20,7 +20,7 @@ module ImageResizer
       end
 
       it 'returns the complete URL with service URL and encoded operations' do
-        expect(subject.quality(80).to_s).to eq('//images-resrc.staticlp.com/O=80/foo.jpg')
+        expect(subject.optimize(quality: 80).to_s).to eq('//images-resrc.staticlp.com/O=80/foo.jpg')
       end
     end
   end

@@ -12,7 +12,6 @@ module ImageResizer
     #
     FORMAT_METHODS = %i(
       resize
-      quality
       aspect_ratio
       crop
       square_crop

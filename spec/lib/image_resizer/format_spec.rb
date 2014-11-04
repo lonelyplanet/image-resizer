@@ -5,8 +5,8 @@ module ImageResizer
     describe 'operations' do
       let(:output) { subject.to_s }
 
-      describe '#quality' do
-        subject { described_class.new.quality(80) }
+      describe '#optimize' do
+        subject { described_class.new.optimize(quality: 80) }
         specify { expect(output).to eq 'O=80'}
       end
 
