@@ -1,2 +1,0 @@
-class ImageResizer
-end

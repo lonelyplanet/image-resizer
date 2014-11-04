@@ -1,6 +1,11 @@
 # ImageResizer
 
-A resrc.it wrapper gem
+A resrc.it wrapper gem. It allows a fluent interface to resrc.it services.
+
+## Usage
+
+    ImageResizer.process('foo.jpg').resize(width: 100, height: 90).quality(80).to_s
+    # => "//images-resrc.staticlp.com/S=W100,H90/O=80/foo.jpg"
 
 ## Installation
 
