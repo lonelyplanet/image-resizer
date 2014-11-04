@@ -5,8 +5,14 @@ module ImageResizer
   #
   # ImageResizer.process('foo.jpg').quality(80)
   #
-  def self.process(img)
-    Image.new(img)
+  def self.process(img, format: nil)
+    Image.new(img, format: format)
+  end
+
+  # Returns the final resized URL. Chaining is not possible.
+  #
+  def self.url_for(img, format)
+    process(img, format: format).to_s
   end
 end
 
