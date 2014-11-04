@@ -1,8 +1,10 @@
 # ImageResizer
 
-A resrc.it wrapper gem. It allows a fluent interface to resrc.it services.
+A ReSRC.it wrapper gem. It allows a fluent interface to resrc.it services. You can find the official ReSRC.it documentation here:
 
-## Usage
+[http://www.resrc.it/docs](http://www.resrc.it/docs)
+
+## Basic usage
 
     ImageResizer.process('foo.jpg').resize(width: 100, height: 90).quality(80).to_s
     # => "//images-resrc.staticlp.com/S=W100,H90/O=80/foo.jpg"
@@ -18,10 +20,6 @@ gem 'image-resizer'
 And then execute:
 
     $ bundle
-
-Or install it yourself as:
-
-    $ gem install scooter
 
 ## Contributing
 
