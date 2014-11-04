@@ -22,6 +22,7 @@ module ImageResizer
       operations << {operation: :quality, value: value}
       @owner
     end
+    alias_method :optimize, :quality
 
     # Sets the image aspect ratio. Parameter must be in WxH format
     #

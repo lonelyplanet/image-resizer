@@ -17,6 +17,7 @@ module ImageResizer
       crop
       square_crop
       operations
+      optimize
     )
 
     def_delegators :format, *FORMAT_METHODS
