@@ -64,6 +64,11 @@ module ImageResizer
       end.join '/'
     end
 
+    def needs_operations?
+      apply_defaults!
+      operations.any?
+    end
+
     # Deep copy
     #
     def clone
@@ -92,6 +97,16 @@ module ImageResizer
       when :crop
         "C=W#{op[:width]},H#{op[:height]},X#{op[:x_offset]},Y#{op[:y_offset]}"
       end
+    end
+
+    def apply_defaults!
+      if (quality = ImageResizer.default_quality) && !has_operation?(:optimize)
+        optimize(quality: quality)
+      end
+    end
+
+    def has_operation?(operation_key)
+      operations.any?{|o| o[:operation] == operation_key}
     end
   end
 end

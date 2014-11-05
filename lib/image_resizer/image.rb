@@ -17,6 +17,7 @@ module ImageResizer
       square_crop
       operations
       optimize
+      needs_operations?
     )
 
     def_delegators :format, *FORMAT_METHODS
@@ -36,12 +37,15 @@ module ImageResizer
       @service ||= SERVICE.end_with?('/') ? SERVICE.chop : SERVICE
     end
 
-    def to_s
-      if operations.size == 0
-        url
-      else
+    # Main output method. Aliases to +to_s+ to simplify tag helpers
+    #
+    def to_url
+      if needs_operations?
         "#{service}/#{format}/#{url}"
+      else
+        url
       end
     end
+    alias_method :to_s, :to_url
   end
 end

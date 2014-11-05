@@ -15,4 +15,33 @@ describe ImageResizer do
         )
     end
   end
+
+  describe '.default_quality' do
+    subject { ImageResizer.process('foo.jpg') }
+
+    it 'sets the value as module variable' do
+      ImageResizer.default_quality = 80
+      expect(ImageResizer.default_quality).to eq(80)
+    end
+
+    it 'ignores the value when not set' do
+      expect(subject.optimize(quality: 25).to_s).to eq(
+        '//images-resrc.staticlp.com/O=25/foo.jpg'
+        )
+    end
+
+    it 'applies the value when set' do
+      ImageResizer.default_quality = 80
+      expect(subject.to_s).to eq(
+        '//images-resrc.staticlp.com/O=80/foo.jpg'
+        )
+    end
+
+    it 'overrides the value when explicitly set' do
+      ImageResizer.default_quality = 80
+      expect(subject.optimize(quality: 25).to_s).to eq(
+        '//images-resrc.staticlp.com/O=25/foo.jpg'
+        )
+    end
+  end
 end

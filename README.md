@@ -6,8 +6,16 @@ A ReSRC.it wrapper gem. It allows a fluent interface to resrc.it services. You c
 
 ## Basic usage
 
-    ImageResizer.process('foo.jpg').resize(width: 100, height: 90).quality(80).to_s
+    ImageResizer.process('foo.jpg').resize(width: 100, height: 90).optimize(quality: 80).to_s
     # => "//images-resrc.staticlp.com/S=W100,H90/O=80/foo.jpg"
+
+## Default parameters
+
+You can have an initializer with
+
+    ImageResizer.default_quality = 80
+
+if you want to. The quality setting will be applied to all images unless overridden on individual items.
 
 ## Installation
 

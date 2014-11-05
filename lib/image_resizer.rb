@@ -14,6 +14,18 @@ module ImageResizer
   def self.url_for(img, format)
     process(img, format: format).to_s
   end
+
+  # Sets quality value
+  #
+  def self.default_quality=(value)
+    @default_quality = value
+  end
+
+  # Gets quality value
+  #
+  def self.default_quality
+    @default_quality
+  end
 end
 
 require 'image_resizer/version'
