@@ -68,16 +68,16 @@ module ImageResizer
       crop(width: width, height: height, x_offset: x_offset, y_offset: y_offset)
     end
 
-    def operations
-      @operations ||= []
-    end
-
     # Outputs the operations chain in Resrc.it's format
     #
     def to_s
       operations.map do |o|
         operation_to_s(o)
       end.join '/'
+    end
+
+    def operations
+      @operations ||= []
     end
 
     def needs_operations?
@@ -90,7 +90,6 @@ module ImageResizer
     def clone
       Marshal.load(Marshal.dump(self))
     end
-
 
     private
 

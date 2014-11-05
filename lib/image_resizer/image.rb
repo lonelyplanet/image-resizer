@@ -18,6 +18,8 @@ module ImageResizer
       operations
       optimize
       needs_operations?
+      resize_wxh
+      crop_from_jcrop
     )
 
     def_delegators :format, *FORMAT_METHODS
