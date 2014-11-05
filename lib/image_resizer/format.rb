@@ -52,6 +52,22 @@ module ImageResizer
       @owner
     end
 
+    # Shortcut method to resize using a "1024x768" kind of string
+    #
+    def resize_wxh(string)
+      width, height = string.split('x')
+      resize(width: width, height: height)
+    end
+
+    # Shortcut method for JCrop-based crops
+    #
+    #     WIDTH:HEIGHT;XOFFSET,YOFFSET
+    #
+    def crop_from_jcrop(string)
+      width, height, x_offset, y_offset = string.split(/[:;,]/)
+      crop(width: width, height: height, x_offset: x_offset, y_offset: y_offset)
+    end
+
     def operations
       @operations ||= []
     end
@@ -75,17 +91,6 @@ module ImageResizer
       Marshal.load(Marshal.dump(self))
     end
 
-    # Build object from a crop described in a custom format:
-    #
-    #     WIDTH:HEIGHT;XOFFSET,YOFFSET
-    #
-    def self.from_jcrop(string)
-      width, height, x_offset, y_offset = string.split(/[:;,]/)
-      new.crop(width: width,
-               height: height,
-               x_offset: x_offset,
-               y_offset: y_offset)
-    end
 
     private
 
