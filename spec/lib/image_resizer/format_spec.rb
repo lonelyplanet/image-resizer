@@ -32,5 +32,12 @@ module ImageResizer
         specify { expect(output).to eq 'C=W80,H70,X10,Y20' }
       end
     end
+
+    describe '.from_jcrop' do
+      subject { described_class.from_jcrop('10:20;30,40') }
+      it 'parses the custom string correctly' do
+        expect(subject.to_s).to eq 'C=W10,H20,X30,Y40'
+      end
+    end
   end
 end

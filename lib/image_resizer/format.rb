@@ -75,6 +75,18 @@ module ImageResizer
       Marshal.load(Marshal.dump(self))
     end
 
+    # Build object from a crop described in a custom format:
+    #
+    #     WIDTH:HEIGHT;XOFFSET,YOFFSET
+    #
+    def self.from_jcrop(string)
+      width, height, x_offset, y_offset = string.split(/[:;,]/)
+      new.crop(width: width,
+               height: height,
+               x_offset: x_offset,
+               y_offset: y_offset)
+    end
+
     private
 
     def operation_to_s(op)
