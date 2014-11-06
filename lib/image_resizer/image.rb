@@ -51,7 +51,7 @@ module ImageResizer
     #
     def to_url
       if needs_operations?
-        "#{ImageResizer.media_service}/#{format}/#{full_url}"
+        "#{ImageResizer.media_service}/#{format}/#{full_url}".gsub('///', '//')
       else
         full_url
       end
