@@ -11,7 +11,7 @@ module ImageResizer
 
   # Returns the final resized URL. Chaining is not possible.
   #
-  def self.url_for(img, format)
+  def self.url_for(img, format = nil)
     process(img, format: format).to_s
   end
 
