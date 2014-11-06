@@ -1,7 +1,5 @@
 module ImageResizer
   class Image
-    SERVICE = ENV['IMAGE_RESIZE_SERVICE'] || '//images-resrc.staticlp.com/'
-
     extend Forwardable
 
     attr_accessor :url
@@ -33,6 +31,16 @@ module ImageResizer
       @format ||= Format.new(self)
     end
 
+    # ReSRC.it expects a full URL
+    #
+    def full_url
+      @full_url ||= if full_url?
+        url
+      else
+        (domain = ImageResizer.media_domain) ? "#{domain}/#{url}" : url
+      end
+    end
+
     # Ensures there are no trailing slashes
     #
     def service
@@ -43,11 +51,17 @@ module ImageResizer
     #
     def to_url
       if needs_operations?
-        "#{service}/#{format}/#{url}"
+        "#{ImageResizer.media_service}/#{format}/#{full_url}"
       else
-        url
+        full_url
       end
     end
     alias_method :to_s, :to_url
+
+    private
+
+    def full_url?
+      url =~ %r{^http(s)?://} || url =~ %r{^//}
+    end
   end
 end

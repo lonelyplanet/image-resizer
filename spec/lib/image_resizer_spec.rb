@@ -44,4 +44,11 @@ describe ImageResizer do
         )
     end
   end
+
+  describe '.media_domain' do
+    it 'sets the value as module variable' do
+      ImageResizer.media_domain = '//lp.com'
+      expect(ImageResizer.media_domain).to eq('//lp.com')
+    end
+  end
 end

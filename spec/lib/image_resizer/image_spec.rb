@@ -14,13 +14,23 @@ module ImageResizer
       end
     end
 
-    describe '#to_s' do
+    describe '#to_url' do
       it 'returns the original filename if no operations are defined' do
-        expect(subject.to_s).to eq('foo.jpg')
+        expect(subject.to_url).to eq('foo.jpg')
       end
 
       it 'returns the complete URL with service URL and encoded operations' do
-        expect(subject.optimize(quality: 80).to_s).to eq('//images-resrc.staticlp.com/O=80/foo.jpg')
+        expect(subject.optimize(quality: 80).to_url).to eq(
+          '//images-resrc.staticlp.com/O=80/foo.jpg'
+        )
+      end
+    end
+
+    describe '#full_url' do
+      it 'prepends the media domain when set' do
+        ImageResizer.media_domain = '//lp.com'
+        expect(subject.full_url).to eq('//lp.com/foo.jpg')
+        ImageResizer.media_domain = nil
       end
     end
   end

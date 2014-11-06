@@ -11,8 +11,15 @@ A ReSRC.it wrapper gem. It allows a fluent interface to resrc.it services. You c
 
 ## Default parameters
 
-You can have an initializer with
+You can have an initializer with some values:
 
+    # The ReSRC.it URL
+    ImageResizer.media_service = '//resrc.it'
+
+    # Domain to use on images lacking a full URI
+    ImageResizer.media_domain = '//media.lonelyplanet.com'
+
+    # Default optimization value
     ImageResizer.default_quality = 80
 
 if you want to. The quality setting will be applied to all images unless overridden on individual items.
