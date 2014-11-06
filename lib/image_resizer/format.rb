@@ -71,7 +71,7 @@ module ImageResizer
     # Outputs the operations chain in Resrc.it's format
     #
     def to_s
-      operations.map do |o|
+      all_operations.map do |o|
         operation_to_s(o)
       end.join '/'
     end
@@ -80,9 +80,27 @@ module ImageResizer
       @operations ||= []
     end
 
+    def default_operations
+      ops = []
+      if quality = ImageResizer.default_quality
+        ops << {operation: :optimize, quality: quality}
+      end
+      ops
+    end
+
+    # User-defined operations plus defaults (unless the user-defined) overrides
+    # the default
+    #
+    def all_operations
+      operations + default_operations.reject do |op|
+        has_operation?(op[:operation])
+      end
+    end
+
+    # Does the image require any processing?
+    #
     def needs_operations?
-      apply_defaults!
-      operations.any?
+      all_operations.any?
     end
 
     # Deep copy
@@ -112,12 +130,6 @@ module ImageResizer
         "S=#{tokens.join(',')}"
       when :crop
         "C=W#{op[:width]},H#{op[:height]},X#{op[:x_offset]},Y#{op[:y_offset]}"
-      end
-    end
-
-    def apply_defaults!
-      if (quality = ImageResizer.default_quality) && !has_operation?(:optimize)
-        optimize(quality: quality)
       end
     end
 
