@@ -66,5 +66,64 @@ module ImageResizer
         ).to eq('S=W100/O=90')
       end
     end
-  end
-end
+
+    describe '#valid?' do
+      context 'a normal format' do
+        it { is_expected.to be_valid }
+      end
+
+      context 'a regular crop' do
+        subject { described_class.new.crop(width: 10, height: 20) }
+
+        it 'is considered valid if we ignore the original image size' do
+          expect(subject).to be_valid
+        end
+
+        context 'with original image size available' do
+          subject do
+            described_class.new.tap do |f|
+              f.original_image_width  = 400
+              f.original_image_height = 300
+            end
+          end
+
+          it 'honours good crop values' do
+            expect(subject.crop(width: 100, height: 100)).to be_valid
+          end
+
+          it 'detects bad crop values' do
+            expect(subject.crop(width: 500, height: 400)).to_not be_valid
+          end
+        end
+      end
+    end
+
+    describe '#fix_crop!' do
+      subject do
+        described_class.new.tap do |f|
+          f.original_image_width  = 400
+          f.original_image_height = 300
+        end
+      end
+
+      it "doesn't change healthy crops" do
+        expect(
+          subject.crop(width: 100, height: 200).fix_crop!.to_s
+          ).to eq('C=W100,H200,X0,Y0')
+      end
+
+      it 'fixes bad crops' do
+        expect(
+          subject.crop(width: 500, height: 900).fix_crop!.to_s
+          ).to eq('C=W400,H300,X0,Y0')
+      end
+
+      it 'fixes bad crops' do
+        expect(
+          subject.crop(width: 300, height: 200, x_offset: 150, y_offset: 200).fix_crop!.to_s
+          ).to eq('C=W250,H100,X150,Y200')
+      end
+    end
+
+  end # describe Format
+end # ImageResizer

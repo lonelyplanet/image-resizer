@@ -1,5 +1,10 @@
 module ImageResizer
   class Format
+    # Optional attributes. If set, the format will be able to validate the crop
+    # parameters
+    #
+    attr_accessor :original_image_width, :original_image_height
+
     # The owner parameter sets the object returned by the operations methods.
     # This allows ImageResizer::Image a fluent interface
     #
@@ -103,6 +108,32 @@ module ImageResizer
       all_operations.any?
     end
 
+    # Ensures the operations are valid. Won't work if the original image width
+    # and height values are unknown though.
+    #
+    def valid?
+      return true unless original_image_width && original_image_height
+      if op = find_operation(:crop)
+        return false if op[:width]  + op[:x_offset] > original_image_width
+        return false if op[:height] + op[:y_offset] > original_image_height
+      end
+      true
+    end
+
+    # Tries to fix the crop values. Requires original image width and height.
+    # Returns the object so to allow method chaining.
+    #
+    def fix_crop!
+      return @owner unless original_image_width && original_image_height
+      return @owner unless crop = find_operation(:crop)
+      safe_w, safe_x = safe_bounds(crop[:width],  crop[:x_offset], original_image_width)
+      safe_h, safe_y = safe_bounds(crop[:height], crop[:y_offset], original_image_height)
+      crop.merge!(
+        width: safe_w, height: safe_h, x_offset: safe_x, y_offset: safe_y
+      )
+      @owner
+    end
+
     # Deep copy
     #
     def clone
@@ -147,7 +178,20 @@ module ImageResizer
     end
 
     def has_operation?(operation_key)
-      operations.any?{|o| o[:operation] == operation_key}
+      find_operation(operation_key)
+    end
+
+    def find_operation(operation_key)
+      operations.find{|op| op[:operation] == operation_key}
+    end
+
+    # Returns the safe crop size and offset as a two-item array. If value+offset
+    # exceeds the image size then shrink the value and keep the offset.
+    #
+    def safe_bounds(value, offset, max)
+      end_offset = [(value + offset), max].min
+      beg_offset = [offset, 0].max
+      [(end_offset - beg_offset), beg_offset]
     end
   end
 end
