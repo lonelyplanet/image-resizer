@@ -109,6 +109,19 @@ module ImageResizer
       Marshal.load(Marshal.dump(self))
     end
 
+    # Shortcut initializer:
+    #
+    #   ImageResizer::Format.from_hash(resize: {width: 100},
+    #                                  optimize: {quality: 50})
+    #
+    def self.from_hash(hash)
+      new.tap do |format|
+        hash.each_pair do |op, params|
+          format.operations << {operation: op}.merge(params)
+        end
+      end
+    end
+
     private
 
     def operation_to_s(op)

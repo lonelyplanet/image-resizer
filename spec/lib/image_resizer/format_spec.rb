@@ -2,8 +2,9 @@ require 'spec_helper'
 
 module ImageResizer
   describe Format do
+    let(:output) { subject.to_s }
+
     describe 'operations' do
-      let(:output) { subject.to_s }
       let(:format) { described_class.new }
 
       describe '#optimize' do
@@ -43,6 +44,26 @@ module ImageResizer
         it 'parses the custom string correctly' do
           expect(output).to eq 'C=W10,H20,X30,Y40'
         end
+      end
+    end
+
+    describe '.from_hash' do
+      specify do
+        expect(
+          described_class.from_hash(optimize: {quality: 50}).to_s
+        ).to eq('O=50')
+      end
+
+      specify do
+        expect(
+          described_class.from_hash(resize: {width: 100}).to_s
+        ).to eq('S=W100')
+      end
+
+      specify do
+        expect(described_class.from_hash(resize: {width: 100},
+                                         optimize: {quality: 90}).to_s
+        ).to eq('S=W100/O=90')
       end
     end
   end
