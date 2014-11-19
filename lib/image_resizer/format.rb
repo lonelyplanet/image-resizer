@@ -45,8 +45,8 @@ module ImageResizer
     #
     def crop(width: 0, height: 0, x_offset: 0, y_offset: 0)
       operations << {
-        operation: :crop, width: width, height: height,
-          x_offset: x_offset, y_offset: y_offset}
+        operation: :crop, width: width.to_i, height: height.to_i,
+          x_offset: x_offset.to_i, y_offset: y_offset.to_i}
       @owner
     end
 
@@ -61,7 +61,7 @@ module ImageResizer
     #
     def resize_wxh(string)
       width, height = string.split('x')
-      resize(width: width, height: height)
+      resize(width: width.to_i, height: height.to_i)
     end
 
     # Shortcut method for JCrop-based crops
@@ -69,7 +69,7 @@ module ImageResizer
     #     WIDTH:HEIGHT;XOFFSET,YOFFSET
     #
     def crop_from_jcrop(string)
-      width, height, x_offset, y_offset = string.split(/[:;,]/)
+      width, height, x_offset, y_offset = string.split(/[:;,]/).map(&:to_i)
       crop(width: width, height: height, x_offset: x_offset, y_offset: y_offset)
     end
 
