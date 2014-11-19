@@ -93,6 +93,7 @@ module ImageResizer
 
           it 'detects bad crop values' do
             expect(subject.crop(width: 500, height: 400)).to_not be_valid
+            expect(subject.crop(width: 0, height: 400)).to_not be_valid
           end
         end
       end

@@ -114,6 +114,7 @@ module ImageResizer
     def valid?
       return true unless original_image_width && original_image_height
       if op = find_operation(:crop)
+        return false if op[:width].zero? || op[:height].zero?
         return false if op[:width]  + op[:x_offset] > original_image_width
         return false if op[:height] + op[:y_offset] > original_image_height
       end
