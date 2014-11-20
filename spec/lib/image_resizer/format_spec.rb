@@ -97,6 +97,12 @@ module ImageResizer
           end
         end
       end
+
+      context 'a zero-dimension crop' do
+        specify do
+          expect(subject.crop(width: 0, height: 400)).to_not be_valid
+        end
+      end
     end
 
     describe '#fix_crop!' do
