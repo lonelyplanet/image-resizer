@@ -29,9 +29,17 @@ module ImageResizer
       end
 
       describe '#crop' do
-        subject { format.crop(width: 80, height: 70,
-          x_offset: 10, y_offset: 20) }
-        specify { expect(output).to eq 'C=W80,H70,X10,Y20' }
+        context 'with normal crop' do
+          subject { format.crop(width: 80, height: 70,
+            x_offset: 10, y_offset: 20) }
+          specify { expect(output).to eq 'C=W80,H70,X10,Y20' }
+        end
+
+        context 'with a relative crop offset' do
+          subject { format.crop(width: 80, height: 70,
+            x_offset: 'OF10', y_offset: 'OF20') }
+          specify { expect(output).to eq 'C=W80,H70,XOF10,YOF20' }
+        end
       end
 
       describe '#resize_wxh' do

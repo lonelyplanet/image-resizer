@@ -43,10 +43,12 @@ module ImageResizer
 
     # Regular crop. Make sure the values don't exceed the image size
     #
+    # The x_offset and y_offset values can have the OF prefix (OF50), and that
+    # means the offset is relative
     def crop(width: 0, height: 0, x_offset: 0, y_offset: 0)
       operations << {
         operation: :crop, width: width.to_i, height: height.to_i,
-          x_offset: x_offset.to_i, y_offset: y_offset.to_i}
+          x_offset: x_offset, y_offset: y_offset}
       @owner
     end
 
