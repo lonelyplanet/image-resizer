@@ -24,13 +24,46 @@ module ImageResizer
           '//images-resrc.staticlp.com/O=80/foo.jpg'
         )
       end
+
+      it 'prevents double ReSRC.it URLs' do
+        item = described_class.new('http://resrc.it/foobar/http://foo.jpg')
+        output = item.optimize(quality: 50).to_url
+        expect(output).to eq('//images-resrc.staticlp.com/O=50/http://foo.jpg')
+      end
     end
 
-    describe '#full_url' do
-      it 'prepends the media domain when set' do
-        ImageResizer.media_domain = '//lp.com'
-        expect(subject.full_url).to eq('//lp.com/foo.jpg')
-        ImageResizer.media_domain = nil
+    describe '#safe_full_url' do
+      {
+        'http://example.com/foobar.jpg' => 'http://example.com/foobar.jpg',
+        '/foobar.jpg'                   => '/foobar.jpg',
+        '//foobar.jpg'                  => '//foobar.jpg',
+        'http://foo/http//foobar.jpg'   => '//foobar.jpg',
+        '//foo/http://foobar.jpg'       => '//foobar.jpg',
+        '//foo/http//foobar.jpg'        => '//foobar.jpg',
+        '//foo/http://foobar.jpg'       => 'http://foobar.jpg'
+      }.each_pair do |input, output|
+        specify do
+          expect(described_class.new(input).full_url).to eq(output)
+        end
+      end
+
+      context 'with a media domain set' do
+        before { ImageResizer.media_domain = '//lp.com' }
+        after  { ImageResizer.media_domain = nil }
+
+        {
+          'http://example.com/foobar.jpg' => 'http://example.com/foobar.jpg',
+          '/foobar.jpg'                   => '//lp.com/foobar.jpg',
+          '//foobar.jpg'                  => '//foobar.jpg',
+          'http://foo/http//foobar.jpg'   => '//foobar.jpg',
+          '//foo/http://foobar.jpg'       => '//foobar.jpg',
+          '//foo/http//foobar.jpg'        => '//foobar.jpg',
+          '//foo/http://foobar.jpg'       => 'http://foobar.jpg'
+        }.each_pair do |input, output|
+          specify do
+            expect(described_class.new(input).full_url).to eq(output)
+          end
+        end
       end
     end
   end

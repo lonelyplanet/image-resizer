@@ -31,16 +31,6 @@ module ImageResizer
       @format ||= Format.new(self)
     end
 
-    # ReSRC.it expects a full URL
-    #
-    def full_url
-      @full_url ||= if full_url?
-        url
-      else
-        (domain = ImageResizer.media_domain) ? "#{domain}/#{url}" : url
-      end
-    end
-
     # Ensures there are no trailing slashes
     #
     def service
@@ -58,10 +48,21 @@ module ImageResizer
     end
     alias_method :to_s, :to_url
 
-    private
-
-    def full_url?
-      url =~ %r{^http(s)?://} || url =~ %r{^//}
+    # Ensures we're not processing an image that already went through ReSRC
+    # http://foo/http://bar.jpg -> http://bar.jpg
+    # Adds the media domain if it is missing, since ReSRC.it expects a full URL
+    def full_url
+      tokens = @url.split(%r{((http(s)?:)?//)})
+      if tokens.size == 1
+        # foo.jpg => //mediadomain/foo.jpg
+        (domain = ImageResizer.media_domain) ? "#{domain}/#{url.gsub(/^\//, '')}" : url
+      elsif tokens.size == 2
+        # http://example.com/foo.jpg => http://example.com/foo.jpg
+        @url
+      else
+        # Strip double https and friends
+        (tokens[-2] + "//" + tokens[-1])
+      end.gsub(/(\/){3,}/, '//')
     end
   end
 end
