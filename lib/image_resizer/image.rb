@@ -9,6 +9,7 @@ module ImageResizer
     # Image.new('foo.jpg').quality(80).square_crop
     #
     FORMAT_METHODS = %i(
+      effects
       resize
       aspect_ratio
       crop
