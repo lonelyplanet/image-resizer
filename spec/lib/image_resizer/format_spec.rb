@@ -12,6 +12,28 @@ module ImageResizer
         specify { expect(output).to eq 'O=80'}
       end
 
+      describe '#effects' do
+        describe 'sharpen with default value' do
+          subject { format.effects(sharpen: 10) }
+          specify { expect(output).to eq 'E=S'}
+        end
+
+        describe 'sharpen with custom value' do
+          subject { format.effects(sharpen: 20) }
+          specify { expect(output).to eq 'E=S20'}
+        end
+
+        describe 'greyscale only' do
+          subject { format.effects(greyscale: true) }
+          specify { expect(output).to eq 'E=G'}
+        end
+
+        describe 'greyscale and sharpen' do
+          subject { format.effects(sharpen: 20, greyscale: true) }
+          specify { expect(output).to eq 'E=S20,G'}
+        end
+      end
+
       describe '#aspect_ratio' do
         subject { format.aspect_ratio('16x9') }
         specify { expect(output).to eq 'C=AR16x9' }

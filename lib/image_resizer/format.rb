@@ -34,6 +34,16 @@ module ImageResizer
       @owner
     end
 
+    # Effects options.
+    #
+    # - sharpen: 1-100
+    # - greyscale: boolean
+    #
+    def effects(sharpen: nil, greyscale: false)
+      operations << { operation: :effects, sharpen: sharpen, greyscale: greyscale }
+      @owner
+    end
+
     # Sets the image aspect ratio. Parameter must be in WxH format
     #
     def aspect_ratio(ratio)
@@ -181,6 +191,11 @@ module ImageResizer
         "S=#{tokens.join(',')}"
       when :crop
         "C=W#{op[:width]},H#{op[:height]},X#{op[:x_offset]},Y#{op[:y_offset]}"
+      when :effects
+        tokens = []
+        tokens << "S#{op[:sharpen] == 10 ? nil : op[:sharpen]}" if op[:sharpen]
+        tokens << 'G' if op[:greyscale]
+        "E=#{tokens.join(',')}"
       end
     end
 
