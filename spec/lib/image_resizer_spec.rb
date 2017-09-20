@@ -11,7 +11,7 @@ describe ImageResizer do
     it 'combines all operations in a single call' do
       format = ImageResizer::Format.new.optimize(quality: 25)
       expect(ImageResizer.url_for('foo.jpg', format)).to eq(
-        '//images-resrc.staticlp.com/O=25/foo.jpg'
+        'https://images-resrc.staticlp.com/O=25/foo.jpg'
         )
     end
   end
@@ -26,21 +26,21 @@ describe ImageResizer do
 
     it 'ignores the value when not set' do
       expect(subject.optimize(quality: 25).to_s).to eq(
-        '//images-resrc.staticlp.com/O=25/foo.jpg'
+        'https://images-resrc.staticlp.com/O=25/foo.jpg'
         )
     end
 
     it 'applies the value when set' do
       ImageResizer.default_quality = 80
       expect(subject.to_s).to eq(
-        '//images-resrc.staticlp.com/O=80/foo.jpg'
+        'https://images-resrc.staticlp.com/O=80/foo.jpg'
         )
     end
 
     it 'overrides the value when explicitly set' do
       ImageResizer.default_quality = 80
       expect(subject.optimize(quality: 25).to_s).to eq(
-        '//images-resrc.staticlp.com/O=25/foo.jpg'
+        'https://images-resrc.staticlp.com/O=25/foo.jpg'
         )
     end
   end

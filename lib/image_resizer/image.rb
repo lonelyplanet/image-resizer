@@ -63,7 +63,7 @@ module ImageResizer
       else
         # Strip double https and friends
         (tokens[-2] + "//" + tokens[-1])
-      end.gsub(/(\/){3,}/, '//')
+      end.gsub(/(\/){3,}/, '//').gsub(/^\/\//, 'https://')
     end
   end
 end
