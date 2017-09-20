@@ -26,9 +26,9 @@ module ImageResizer
       end
 
       it 'prevents double ReSRC.it URLs' do
-        item = described_class.new('http://resrc.it/foobar/http://foo.jpg')
+        item = described_class.new('http://resrc.it/foobar/https://foo.jpg')
         output = item.optimize(quality: 50).to_url
-        expect(output).to eq('https://images-resrc.staticlp.com/O=50/http://foo.jpg')
+        expect(output).to eq('https://images-resrc.staticlp.com/O=50/https://foo.jpg')
       end
     end
 

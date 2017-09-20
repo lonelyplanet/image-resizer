@@ -53,7 +53,7 @@ module ImageResizer
     # http://foo/http://bar.jpg -> http://bar.jpg
     # Adds the media domain if it is missing, since ReSRC.it expects a full URL
     def full_url
-      tokens = @url.split(%r{((http(s)?:)?//)})
+      tokens = @url.split(%r{((https?:)?//)})
       if tokens.size == 1
         # foo.jpg => //mediadomain/foo.jpg
         (domain = ImageResizer.media_domain) ? "#{domain}/#{url.gsub(/^\//, '')}" : url
