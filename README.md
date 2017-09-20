@@ -7,17 +7,17 @@ A ReSRC.it wrapper gem. It allows a fluent interface to resrc.it services. You c
 ## Basic usage
 
     ImageResizer.process('foo.jpg').resize(width: 100, height: 90).optimize(quality: 80).to_s
-    # => "//images-resrc.staticlp.com/S=W100,H90/O=80/foo.jpg"
+    # => "https://images-resrc.staticlp.com/S=W100,H90/O=80/foo.jpg"
 
 ## Default parameters
 
 You can have an initializer with some values:
 
     # The ReSRC.it URL
-    ImageResizer.media_service = '//resrc.it'
+    ImageResizer.media_service = 'https://resrc.it'
 
     # Domain to use on images lacking a full URI
-    ImageResizer.media_domain = '//media.lonelyplanet.com'
+    ImageResizer.media_domain = 'https://media.lonelyplanet.com'
 
     # Default optimization value
     ImageResizer.default_quality = 80

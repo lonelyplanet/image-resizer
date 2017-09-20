@@ -21,14 +21,14 @@ module ImageResizer
 
       it 'returns the complete URL with service URL and encoded operations' do
         expect(subject.optimize(quality: 80).to_url).to eq(
-          '//images-resrc.staticlp.com/O=80/foo.jpg'
+          'https://images-resrc.staticlp.com/O=80/foo.jpg'
         )
       end
 
       it 'prevents double ReSRC.it URLs' do
         item = described_class.new('http://resrc.it/foobar/http://foo.jpg')
         output = item.optimize(quality: 50).to_url
-        expect(output).to eq('//images-resrc.staticlp.com/O=50/http://foo.jpg')
+        expect(output).to eq('https://images-resrc.staticlp.com/O=50/http://foo.jpg')
       end
     end
 
@@ -36,10 +36,10 @@ module ImageResizer
       {
         'http://example.com/foobar.jpg' => 'http://example.com/foobar.jpg',
         '/foobar.jpg'                   => '/foobar.jpg',
-        '//foobar.jpg'                  => '//foobar.jpg',
-        'http://foo/http//foobar.jpg'   => '//foobar.jpg',
-        '//foo/http://foobar.jpg'       => '//foobar.jpg',
-        '//foo/http//foobar.jpg'        => '//foobar.jpg',
+        '//foobar.jpg'                  => 'https://foobar.jpg',
+        'http://foo/http//foobar.jpg'   => 'https://foobar.jpg',
+        '//foo/http://foobar.jpg'       => 'https://foobar.jpg',
+        '//foo/http//foobar.jpg'        => 'https://foobar.jpg',
         '//foo/http://foobar.jpg'       => 'http://foobar.jpg'
       }.each_pair do |input, output|
         specify do
@@ -53,11 +53,11 @@ module ImageResizer
 
         {
           'http://example.com/foobar.jpg' => 'http://example.com/foobar.jpg',
-          '/foobar.jpg'                   => '//lp.com/foobar.jpg',
-          '//foobar.jpg'                  => '//foobar.jpg',
-          'http://foo/http//foobar.jpg'   => '//foobar.jpg',
-          '//foo/http://foobar.jpg'       => '//foobar.jpg',
-          '//foo/http//foobar.jpg'        => '//foobar.jpg',
+          '/foobar.jpg'                   => 'https://lp.com/foobar.jpg',
+          '//foobar.jpg'                  => 'https://foobar.jpg',
+          'http://foo/http//foobar.jpg'   => 'https://foobar.jpg',
+          '//foo/http://foobar.jpg'       => 'https://foobar.jpg',
+          '//foo/http//foobar.jpg'        => 'https://foobar.jpg',
           '//foo/http://foobar.jpg'       => 'http://foobar.jpg'
         }.each_pair do |input, output|
           specify do

@@ -40,7 +40,7 @@ module ImageResizer
   # Default image service
   #
   def self.media_service
-    @media_service || '//images-resrc.staticlp.com'
+    @media_service || 'https://images-resrc.staticlp.com'
   end
 
   # Sets quality value
